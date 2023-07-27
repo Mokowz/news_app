@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import os
 import requests
+from django.core.paginator import Paginator
 
 # Create your views here.
 def home(request):
@@ -14,8 +15,13 @@ def home(request):
         search_term = request.POST['search']
         articles = fetch_news_data(url, search_term, api)
 
+        p = Paginator(articles, 5)
+        page_number = request.POST.get("page")
+        article_new = p.get_page(page_number)
+
         context = {
-            "articles": articles,
+            # "articles": articles,
+            "article_new": article_new,
         }
 
         return render(request, "news/home.html", context)
@@ -28,7 +34,7 @@ def fetch_news_data(url, search_term, api):
     response = requests.get(url.format(search_term, api)).json()
   
     news_articles = []
-    for article in response["articles"][:5]:
+    for article in response["articles"][:50]:
         news_articles.append({
             "title": article["title"],
             "description": article["description"],

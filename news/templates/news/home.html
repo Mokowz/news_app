@@ -1,27 +1,57 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h1>Global News</h1>
-    <form action="/" method="POST">
-        {% csrf_token %}
-        <input type="text" name="search" placeholder="Enter Search Term">
-        <input type="submit" value="Search">
-    </form>
+    <div class="container">
+        <div class="form-cont">
+            <h1>Global News</h1>
+            <form action="/" method="POST">
+                {% csrf_token %}
+                <input type="text" name="search" placeholder="Enter Search Term">
+                <input type="submit" value="Search">
+            </form>
+        </div>
+        
+        <div class="row">
+            <div class="row article-cont col-9">
+                {% for article in article_new %}
+                    <article class="col-12 article-card">
+                        <h2>
+                            <a href="">{{ article.title }}</a>
+                        </h2>
+                        <h4 class="text-muted small">{{ article.author }}</h4>
+                        <p>{{ article.description }}</p>
+                    </article>
+            {% endfor %}
+            </div>
+            <div class="other-cont col-3">
+                <input type="button" value="Know something more?" class="btn btn-secondary">
+                <p>Previous: {{ article_new.has_previous }}</p>
+                <p>Next: {{ article_new.has_next }}</p>
+            </div>
+        </div>
 
-    <div>
-        {% for article in articles %}
-            <article>
-                <h2>{{ article.title }}</h2>
-                <h4>{{ article.author }}</h4>
-                <p>{{ article.description }}</p>
-            </article>
-    {% endfor %}
+        <div class="pag">
+            {% if article_new.has_previous %}
+                <a href="?page=1">&laquo; First</a>
+                <a href="?page={{ article_new.previous_page_number }}">Previous</a>
+            {% endif %}
+            <span>Page {{ article_new.number }} of {{ article_new.paginator.num_pages }}</span>
+            {% if article_new.has_next %}
+                <a href="?page={{ article_new.next_page_number }}">Next</a>
+                <a href="?page={{ article_new.paginator.num_pages }}">Last &raquo;</a>
+            {% endif %}
+        </div>
+        
     </div>
+    
     
 </body>
 </html>
