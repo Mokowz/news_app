@@ -1,8 +1,11 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.http import HttpResponse
 import os
 import requests
 from django.core.paginator import Paginator
+from django.views.generic.list import ListView
 
 # Create your views here.
 def home(request):
@@ -27,6 +30,19 @@ def home(request):
         return render(request, "news/home.html", context)
     else:
         return render(request, "news/home.html")
+
+
+
+# Class based view
+class NewsList(ListView):
+    template = ""
+    context_object_name = "article_new"
+
+    def get_queryset(self):
+        field_data = self.request.GET.get("")
+
+
+
 
 
 # Function to fetch and return the news data 
