@@ -12,7 +12,7 @@
     <div class="container">
         <div class="form-cont">
             <h1>Global News</h1>
-            <form action="/" method="POST">
+            <form action="/" method="GET">
                 {% csrf_token %}
                 <input type="text" name="search" placeholder="Enter Search Term">
                 <input type="submit" value="Search">
@@ -23,8 +23,9 @@
             <div class="row article-cont col-9">
                 {% for article in article_new %}
                     <article class="col-12 article-card">
+                        <!-- <img src="{{ article.imageUrl }}" class="img-hd" alt="" srcset=""> -->
                         <h2>
-                            <a href="">{{ article.title }}</a>
+                            <a href="{% url 'detail' %}">{{ article.title }}</a>
                         </h2>
                         <h4 class="text-muted small">{{ article.author }}</h4>
                         <p>{{ article.description }}</p>
